@@ -1,0 +1,57 @@
+# -*- coding:utf-8 -*-
+# created by xiehelin
+
+"""
+super()用法
+
+super参数：
+第一个参数:当前类，用来表示想要调用的当前类的父类方法，用当前类->父类
+第二个参数:类本身或实例本身
+"""
+
+
+# 对比在__init__() 和 __new__()用法
+
+# 1.__init__() 继承
+
+class Base(object):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def speaking(self):
+        print("%s 正在说话 " % self.name)
+
+
+class Person(Base):
+    def __init__(self, name, age, sex):
+        super(Person, self).__init__(name, age)
+        self.sex = sex
+
+    def speaking(self):
+        # 重写
+        print("%s %s 正在叫" % (self.sex, self.name))
+
+
+p1 = Person("aaa", 10, "m")
+p1.speaking()
+
+
+# 2.__new__() 实现单例模式
+
+class Obj(object):
+    _or_class = None
+
+    def __init__(self, name):
+        self.name = name
+
+    def __new__(cls, *args, **kwargs):
+        if cls._or_class is None:
+            cls._or_class = super(Obj, cls).__new__(cls)
+        return cls._or_class
+
+
+o1 = Obj("aaa")
+o2 = Obj("bbb")
+print(o1, o2)
+
